@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import 'modern-normalize';
 import styled from 'styled-components';
+import { RotatingSquare } from 'react-loader-spinner';
 
 export const GlobalStyles = createGlobalStyle`
 html {

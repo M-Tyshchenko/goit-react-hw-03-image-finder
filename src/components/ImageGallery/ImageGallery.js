@@ -1,6 +1,7 @@
 import { Image, ImagesList, ImagesListItem } from './ImageGallery.styled';
 
 export const ImageGallery = ({ images }) => {
+  console.log('images:', images);
   return (
     <ImagesList>
       {images.map(image => (

@@ -5,39 +5,65 @@ import { SearchBar } from './SearchBar/SearchBar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { LoadMoreBtn } from './LoadMoreBtn/LoadMoreBtn';
 import { fetchImages } from 'api';
-
-// const initialState = {
-//   query: '',
-//   images: [],
-//   pages: 1,
-// };
+import { BarLoader } from 'react-spinners';
 
 export class App extends Component {
   state = {
     query: '',
     images: [],
     page: 1,
+    perPage: 12,
+    loading: false,
+    totalHits: null,
   };
 
-  async componentDidMount() {
-    const images = await fetchImages();
-    console.log(images);
-    this.setState({ images });
+  componentDidMount() {
+    const { query, page } = this.state;
+
+    this.setState({ loading: true });
+
+    setTimeout(async () => {
+      const fetch = await fetchImages(query, page);
+      const images = fetch.hits;
+      console.log(fetch.totalHits);
+
+      this.setState({ images, loading: false, totalHits: fetch.totalHits });
+    }, 1000);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.query !== this.state.query ||
-      prevState.page !== this.state.page
-    ) {
-      console.log(
-        `HTTP запит за ${this.state.query.slice(
-          this.state.query.indexOf('/') + 1,
-          this.state.query.length
-        )} та page ${this.state.page}`
-      );
-      //HTTP запит за query
-      // this.setState({images: результат запиту})
+  async componentDidUpdate(prevProps, prevState) {
+    const { query, page } = this.state;
+    const currentQuery = query.slice(query.indexOf('/') + 1, query.length);
+
+    if (prevState.query !== query || prevState.page !== page) {
+      this.setState({ loading: true });
+
+      // console.log(`HTTP запит за ${currentQuery} та page ${page}`);
+
+      try {
+        const fetch = await fetchImages(currentQuery, page);
+        const images = fetch.hits;
+
+        if (!images.length) {
+          this.setState({ loading: false });
+          throw new Error();
+        }
+        console.log('imgs from fetch', images);
+        console.log(fetch.totalHits);
+
+        if (page > prevState.page) {
+          this.setState(prevState => ({
+            images: [...prevState.images, ...images],
+            loading: false,
+            totalHits: fetch.totalHits,
+          }));
+          return;
+        }
+
+        this.setState({ images, loading: false, totalHits: fetch.totalHits });
+      } catch (error) {
+        alert('Oops! No images for this query');
+      }
     }
   }
 
@@ -48,20 +74,30 @@ export class App extends Component {
       query: `${nanoid(10)}/${newQuery}`,
       images: [],
       page: 1,
+      totalHits: null,
     });
   };
 
   loadMoreHandler = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
   };
 
   render() {
-    const { images } = this.state;
+    const { query, page, perPage, images, loading, totalHits } = this.state;
+    const totalPages = Math.ceil(totalHits / perPage);
     return (
       <Container>
         <SearchBar changeQuery={this.changeQuery} />
-        <ImageGallery images={images} />
-        <LoadMoreBtn loadMoreHandler={this.loadMoreHandler} />
+        {loading ? (
+          <BarLoader color="#3f51b5" width="100%" />
+        ) : (
+          <ImageGallery images={images} />
+        )}
+        {totalPages !== page && (
+          <LoadMoreBtn loadMoreHandler={this.loadMoreHandler} />
+        )}
 
         <GlobalStyles />
       </Container>
