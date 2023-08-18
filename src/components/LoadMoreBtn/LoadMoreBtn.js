@@ -1,7 +1,11 @@
-export const LoadMoreBtn = () => {
-    return (
-        <div>
-            <button type="button">Load more</button>
-        </div>
-    )
-}
+import { LoadMoreButton } from './LoadMoreBtn.styled';
+
+export const LoadMoreBtn = ({ loadMoreHandler }) => {
+  return (
+    <div>
+      <LoadMoreButton onClick={loadMoreHandler} type="button">
+        Load more
+      </LoadMoreButton>
+    </div>
+  );
+};

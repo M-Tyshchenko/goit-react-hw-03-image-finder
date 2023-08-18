@@ -3,6 +3,18 @@ import 'modern-normalize';
 import styled from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
+html {
+  box-sizing: border-box;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -52,12 +64,15 @@ img {
   height: auto;
 }`;
 
-
 export const Container = styled.div`
   margin: 0 auto;
   padding: 0 20px;
-  
-  display: flex;
-  flex-direction: column;
-  
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 16px;
+  padding-bottom: 24px;
+
+  /* display: flex;
+  flex-direction: column; */
 `;

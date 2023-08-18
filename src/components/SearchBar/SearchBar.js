@@ -1,5 +1,5 @@
 import {
-  FormContainer,
+  HeaderSection,
   FormInput,
   FormLabel,
   StyledIcon,
@@ -8,10 +8,16 @@ import {
 
 export const SearchBar = ({ changeQuery }) => {
   return (
-    <FormContainer>
+    <HeaderSection>
       <form
         onSubmit={event => {
           event.preventDefault();
+
+          if (event.target.elements.query.value.trim() === '') {
+            alert('Field must not be empty');
+            return;
+          }
+
           changeQuery(event.target.elements.query.value);
           event.target.reset();
         }}
@@ -24,6 +30,6 @@ export const SearchBar = ({ changeQuery }) => {
           <FormInput type="text" name="query" />
         </FormLabel>
       </form>
-    </FormContainer>
+    </HeaderSection>
   );
 };
