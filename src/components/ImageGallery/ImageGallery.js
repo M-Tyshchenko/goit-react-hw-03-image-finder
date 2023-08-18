@@ -1,5 +1,3 @@
 export const ImageGallery = () => {
-    return (
-        <div></div>
-    )
-}
+  return <div>Gallery</div>;
+};

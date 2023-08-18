@@ -1,8 +1,8 @@
-import { Container, GlobalStyles } from "./GlobalStyle";
-import React, { Component } from 'react'
-import { SearchBar } from "./SearchBar/SearchBar";
-import { ImageGallery } from "./ImageGallery/ImageGallery";
-import { LoadMoreBtn } from "./LoadMoreBtn/LoadMoreBtn";
+import { Container, GlobalStyles } from './GlobalStyle';
+import React, { Component } from 'react';
+import { SearchBar } from './SearchBar/SearchBar';
+import { ImageGallery } from './ImageGallery/ImageGallery';
+import { LoadMoreBtn } from './LoadMoreBtn/LoadMoreBtn';
 
 // const initialState = {
 //   query: '',
@@ -17,26 +17,27 @@ export class App extends Component {
     pages: 1,
   };
 
-  componentDidMount() { }
-  
-  componentDidUpdate(prevProps, prevState) { }
-  
-  componentWillUnmount() { }
+  componentDidMount() {}
 
-  changeQuery = () => { }
-  
-  setImages = () => { }
-  
+  componentDidUpdate(prevProps, prevState) {}
 
-  render () {
-  return (
-    <Container>
-      <SearchBar/>
-      <ImageGallery />
-      <LoadMoreBtn/>
+  componentWillUnmount() {}
 
-      <GlobalStyles/>
-    </Container>
+  changeQuery = newQuery => {
+    this.setState({ query: newQuery });
+  };
+
+  setImages = () => {};
+
+  render() {
+    return (
+      <Container>
+        <SearchBar changeQuery={this.changeQuery} />
+        <ImageGallery />
+        <LoadMoreBtn />
+
+        <GlobalStyles />
+      </Container>
     );
-    }
-};
+  }
+}
