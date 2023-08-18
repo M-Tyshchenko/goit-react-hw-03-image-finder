@@ -85,7 +85,7 @@ export class App extends Component {
   };
 
   render() {
-    const { query, page, perPage, images, loading, totalHits } = this.state;
+    const { page, perPage, images, loading, totalHits } = this.state;
     const totalPages = Math.ceil(totalHits / perPage);
     return (
       <Container>
