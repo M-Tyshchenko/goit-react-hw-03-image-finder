@@ -95,9 +95,12 @@ export class App extends Component {
         ) : (
           <ImageGallery images={images} />
         )}
-        {totalPages !== page && (
+        {(totalPages !== page && (
           <LoadMoreBtn loadMoreHandler={this.loadMoreHandler} />
-        )}
+        )) ||
+          (!images.length && (
+            <LoadMoreBtn loadMoreHandler={this.loadMoreHandler} />
+          ))}
 
         <GlobalStyles />
       </Container>
