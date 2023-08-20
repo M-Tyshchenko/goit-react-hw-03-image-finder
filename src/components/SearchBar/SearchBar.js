@@ -1,3 +1,4 @@
+import toast, { Toaster } from 'react-hot-toast';
 import {
   HeaderSection,
   FormInput,
@@ -14,7 +15,7 @@ export const SearchBar = ({ changeQuery }) => {
           event.preventDefault();
 
           if (event.target.elements.query.value.trim() === '') {
-            alert('Field must not be empty');
+            toast.error('Field must not be empty');
             return;
           }
 
@@ -30,6 +31,7 @@ export const SearchBar = ({ changeQuery }) => {
           <FormInput type="text" name="query" />
         </FormLabel>
       </form>
+      <Toaster />
     </HeaderSection>
   );
 };

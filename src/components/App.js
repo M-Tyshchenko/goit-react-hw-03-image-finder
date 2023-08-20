@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-import { Container, GlobalStyles } from './GlobalStyle';
+import toast, { Toaster } from 'react-hot-toast';
+import { Container, GlobalStyles, LoadMoreButton } from './GlobalStyle';
 import { SearchBar } from './SearchBar/SearchBar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import { LoadMoreBtn } from './LoadMoreBtn/LoadMoreBtn';
 import { fetchImages } from 'api';
 import { BarLoader } from 'react-spinners';
 
@@ -17,18 +17,22 @@ export class App extends Component {
     totalHits: null,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { query, page } = this.state;
 
-    this.setState({ loading: true });
+    try {
+      this.setState({ loading: true });
 
-    setTimeout(async () => {
       const fetch = await fetchImages(query, page);
       const images = fetch.hits;
-      console.log(fetch.totalHits);
+      // console.log(fetch.totalHits);
 
       this.setState({ images, loading: false, totalHits: fetch.totalHits });
-    }, 1000);
+    } catch {
+      toast.error('Error while loading data. Try again later.');
+    } finally {
+      this.setState({ loading: false });
+    }
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -36,38 +40,34 @@ export class App extends Component {
     const currentQuery = query.slice(query.indexOf('/') + 1, query.length);
 
     if (prevState.query !== query || prevState.page !== page) {
-      this.setState({ loading: true });
-
-      // console.log(`HTTP запит за ${currentQuery} та page ${page}`);
-
       try {
+        this.setState({ loading: true });
+
         const fetch = await fetchImages(currentQuery, page);
         const images = fetch.hits;
 
         if (!images.length) {
-          this.setState({ loading: false });
           throw new Error();
         }
-        console.log('imgs from fetch', images);
-        console.log(fetch.totalHits);
 
         if (page > prevState.page) {
           this.setState(prevState => ({
             images: [...prevState.images, ...images],
-            loading: false,
+
             totalHits: fetch.totalHits,
           }));
+
           return;
         }
 
-        this.setState({ images, loading: false, totalHits: fetch.totalHits });
-      } catch (error) {
-        alert('Oops! No images for this query');
+        this.setState({ images, totalHits: fetch.totalHits });
+      } catch {
+        toast.error('Oops! No images for this query');
+      } finally {
+        this.setState({ loading: false });
       }
     }
   }
-
-  componentWillUnmount() {}
 
   changeQuery = newQuery => {
     this.setState({
@@ -87,21 +87,20 @@ export class App extends Component {
   render() {
     const { page, perPage, images, loading, totalHits } = this.state;
     const totalPages = Math.ceil(totalHits / perPage);
+
     return (
       <Container>
         <SearchBar changeQuery={this.changeQuery} />
-        {loading ? (
-          <BarLoader color="#3f51b5" width="100%" />
-        ) : (
-          <ImageGallery images={images} />
-        )}
-        {(totalPages !== page && (
-          <LoadMoreBtn loadMoreHandler={this.loadMoreHandler} />
-        )) ||
-          (!images.length && (
-            <LoadMoreBtn loadMoreHandler={this.loadMoreHandler} />
-          ))}
+        <ImageGallery images={images} />
 
+        {totalHits !== null && totalPages !== page && (
+          <LoadMoreButton type="button" onClick={this.loadMoreHandler}>
+            Load More
+          </LoadMoreButton>
+        )}
+
+        {loading && <BarLoader color="#3f51b5" width="100%" height="10" />}
+        <Toaster />
         <GlobalStyles />
       </Container>
     );
