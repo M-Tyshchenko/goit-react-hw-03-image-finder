@@ -28,7 +28,11 @@ export const SearchBar = ({ changeQuery }) => {
             <StyledIcon />
           </SubmitBtn>
 
-          <FormInput type="text" name="query" />
+          <FormInput
+            type="text"
+            name="query"
+            placeholder="Search images and photos"
+          />
         </FormLabel>
       </form>
       <Toaster />

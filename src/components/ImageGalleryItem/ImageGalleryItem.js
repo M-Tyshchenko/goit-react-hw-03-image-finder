@@ -35,9 +35,18 @@ export class ImageGalleryItem extends Component {
           onRequestClose={this.closeModal}
           style={{
             overlay: {
-              backgroundColor: 'rgba(0, 0, 0, 0.75)',
-              zIndex: 1200,
+              position: 'fixed',
+              top: '0',
+              left: '0',
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              zIndex: '1200',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             },
+
             content: {
               top: '50%',
               left: '50%',

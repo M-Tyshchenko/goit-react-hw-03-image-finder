@@ -19,8 +19,6 @@ export const Image = styled.img`
 `;
 
 export const ModalImage = styled.img`
-  width: fit-content;
-  height: 600px;
-
-  object-fit: contain;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 24px);
 `;
