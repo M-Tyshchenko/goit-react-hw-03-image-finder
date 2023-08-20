@@ -25,7 +25,6 @@ export class App extends Component {
 
       const fetch = await fetchImages(query, page);
       const images = fetch.hits;
-      // console.log(fetch.totalHits);
 
       this.setState({ images, loading: false, totalHits: fetch.totalHits });
     } catch {
@@ -99,7 +98,7 @@ export class App extends Component {
           </LoadMoreButton>
         )}
 
-        {loading && <BarLoader color="#3f51b5" width="100%" height="10" />}
+        {loading && <BarLoader color="#3f51b5" width="100%" />}
         <Toaster />
         <GlobalStyles />
       </Container>
