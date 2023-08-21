@@ -17,22 +17,22 @@ export class App extends Component {
     totalHits: null,
   };
 
-  async componentDidMount() {
-    const { query, page } = this.state;
+  // async componentDidMount() {
+  //   const { query, page } = this.state;
 
-    try {
-      this.setState({ loading: true });
+  //   try {
+  //     this.setState({ loading: true });
 
-      const fetch = await fetchImages(query, page);
-      const images = fetch.hits;
+  //     const fetch = await fetchImages(query, page);
+  //     const images = fetch.hits;
 
-      this.setState({ images, loading: false, totalHits: fetch.totalHits });
-    } catch {
-      toast.error('Error while loading data. Try again later.');
-    } finally {
-      this.setState({ loading: false });
-    }
-  }
+  //     this.setState({ images, loading: false, totalHits: fetch.totalHits });
+  //   } catch {
+  //     toast.error('Error while loading data. Try again later.');
+  //   } finally {
+  //     this.setState({ loading: false });
+  //   }
+  // }
 
   async componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
